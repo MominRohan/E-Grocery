@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'number_verification_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -51,6 +52,13 @@ class _SignUpPageState extends State<SignUpPage> {
           _otpSent = true;
           _loading = false;
         });
+        
+        // Navigate to NumberVerification screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const NumberVerificationPage()),
+        );
+        
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("OTP sent to ${_phoneController.text}")),
         );
@@ -163,7 +171,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 const SizedBox(height: 16),
 
-                // 🔹 OTP field (only if sent)
+                /* 🔹 OTP field (only if sent)
                 if (_otpSent)
                   TextFormField(
                     controller: _otpController,
@@ -172,7 +180,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     validator: (value) =>
                     value == null || value.isEmpty ? "Enter OTP" : null,
                   ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 24), */
 
                 // 🔹 Sign Up button
                 SizedBox(

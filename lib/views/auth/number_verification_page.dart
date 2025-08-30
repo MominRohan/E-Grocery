@@ -107,7 +107,7 @@ class NumberVerificationHeader extends StatelessWidget {
       children: [
         const SizedBox(height: AppDefaults.padding),
         Text(
-          'Entry Your 4 digit code',
+          'Entry Your 6 digit code',
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: AppDefaults.padding),
@@ -141,8 +141,8 @@ class OTPTextFields extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           SizedBox(
-            width: 68,
-            height: 68,
+            width: 48,
+            height: 58,
             child: TextFormField(
               onChanged: (v) {
                 if (v.length == 1) {
@@ -163,8 +163,8 @@ class OTPTextFields extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 68,
-            height: 68,
+            width: 48,
+            height: 58,
             child: TextFormField(
               onChanged: (v) {
                 if (v.length == 1) {
@@ -185,8 +185,8 @@ class OTPTextFields extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 68,
-            height: 68,
+            width: 48,
+            height: 58,
             child: TextFormField(
               onChanged: (v) {
                 if (v.length == 1) {
@@ -207,12 +207,56 @@ class OTPTextFields extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 68,
-            height: 68,
+            width: 48,
+            height: 58,
             child: TextFormField(
               onChanged: (v) {
                 if (v.length == 1) {
                   FocusScope.of(context).nextFocus();
+                } else {
+                  FocusScope.of(context).previousFocus();
+                }
+              },
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(1),
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          SizedBox(
+            width: 48,
+            height: 58,
+            child: TextFormField(
+              onChanged: (v) {
+                if (v.length == 1) {
+                  FocusScope.of(context).nextFocus();
+                } else {
+                  FocusScope.of(context).previousFocus();
+                }
+              },
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(1),
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          SizedBox(
+            width: 48,
+            height: 58,
+            child: TextFormField(
+              onChanged: (v) {
+                if (v.length == 1) {
+                  // This is the last field, so don't try to move focus
                 } else {
                   FocusScope.of(context).previousFocus();
                 }
