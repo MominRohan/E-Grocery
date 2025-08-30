@@ -60,7 +60,7 @@ class AppTheme {
       ),
       inputDecorationTheme: defaultInputDecorationTheme,
       sliderTheme: const SliderThemeData(
-        showValueIndicator: ShowValueIndicator.always,
+        showValueIndicator: ShowValueIndicator.onDrag,
         thumbColor: Colors.white,
       ),
       tabBarTheme: const TabBarThemeData(

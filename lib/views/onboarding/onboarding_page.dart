@@ -19,12 +19,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
   late PageController controller;
   List<OnboardingModel> items = OnboardingData.items;
 
-  onPageChange(int value) {
+  void onPageChange(int value) {
     currentPage = value;
     setState(() {});
   }
 
-  _gotoNextPage() {
+  void _gotoNextPage() {
     if (currentPage < items.length - 1) {
       controller.nextPage(
         duration: AppDefaults.duration,
@@ -35,7 +35,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     }
   }
 
-  _gotoLoginSignUp() {
+  void _gotoLoginSignUp() {
     Navigator.pushNamed(context, AppRoutes.introLogin);
   }
 

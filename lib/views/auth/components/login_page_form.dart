@@ -20,12 +20,12 @@ class _LoginPageFormState extends State<LoginPageForm> {
   final _key = GlobalKey<FormState>();
 
   bool isPasswordShown = false;
-  onPassShowClicked() {
+  void onPassShowClicked() {
     isPasswordShown = !isPasswordShown;
     setState(() {});
   }
 
-  onLogin() {
+  void onLogin() {
     final bool isFormOkay = _key.currentState?.validate() ?? false;
     if (isFormOkay) {
       Navigator.pushNamed(context, AppRoutes.entryPoint);

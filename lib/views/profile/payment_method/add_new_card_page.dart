@@ -22,7 +22,7 @@ class _AddNewCardPageState extends State<AddNewCardPage> {
 
   bool rememberMyCard = false;
 
-  onTextChanged(v) {
+  void onTextChanged(v) {
     if (mounted) setState(() {});
   }
 

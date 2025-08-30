@@ -22,12 +22,12 @@ class PriceAndQuantityRow extends StatefulWidget {
 class _PriceAndQuantityRowState extends State<PriceAndQuantityRow> {
   int quantity = 1;
 
-  onQuantityIncrease() {
+  void onQuantityIncrease() {
     quantity++;
     setState(() {});
   }
 
-  onQuantityDecrease() {
+  void onQuantityDecrease() {
     if (quantity > 1) {
       quantity--;
       setState(() {});

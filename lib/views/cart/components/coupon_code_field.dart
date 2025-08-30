@@ -16,7 +16,7 @@ class _CouponCodeFieldState extends State<CouponCodeField> {
 
   bool isFilled = false;
 
-  onChange(String? text) {
+  void onChange(String? text) {
     if (text != null && text.isNotEmpty) {
       isFilled = true;
       setState(() {});
