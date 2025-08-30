@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import '../../../core/constants/constants.dart';
 import '../../../core/utils/validators.dart';
 import 'already_have_accout.dart';
-import 'sign_up_button.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});

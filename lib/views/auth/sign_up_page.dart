@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -13,13 +14,16 @@ class _SignUpPageState extends State<SignUpPage> {
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   String? _verificationId;
   bool _otpSent = false;
   bool _loading = false;
+  bool _obscurePassword = true;
 
   /// 🔹 Send OTP
   Future<void> _sendOTP() async {
@@ -29,7 +33,6 @@ class _SignUpPageState extends State<SignUpPage> {
       phoneNumber: _phoneController.text.trim(),
       timeout: const Duration(seconds: 60),
       verificationCompleted: (PhoneAuthCredential credential) async {
-        // Auto-verification on some devices
         await _auth.signInWithCredential(credential);
         setState(() => _loading = false);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -58,7 +61,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  /// 🔹 Verify OTP
+  /// 🔹 Verify OTP + Save User
   Future<void> _verifyOTP() async {
     if (_verificationId == null) return;
 
@@ -70,7 +73,15 @@ class _SignUpPageState extends State<SignUpPage> {
         smsCode: _otpController.text.trim(),
       );
 
-      await _auth.signInWithCredential(credential);
+      UserCredential userCred = await _auth.signInWithCredential(credential);
+
+      // Save user info in Firestore
+      await _firestore.collection("users").doc(userCred.user!.uid).set({
+        "name": _nameController.text.trim(),
+        "phone": _phoneController.text.trim(),
+        "password": _passwordController.text.trim(), // ⚠️ Not secure, just for demo
+        "createdAt": FieldValue.serverTimestamp(),
+      });
 
       setState(() => _loading = false);
 
@@ -78,7 +89,7 @@ class _SignUpPageState extends State<SignUpPage> {
         const SnackBar(content: Text("Account created successfully!")),
       );
 
-      // Navigate to home page after success
+      // Navigate to Home
       // Navigator.pushReplacementNamed(context, "/home");
 
     } catch (e) {
@@ -93,29 +104,32 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        title: const Text("Sign Up"),
-        centerTitle: true,
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 🔹 Full Name
+                const SizedBox(height: 30),
+
+                const Text(
+                  "Welcome to our\ngrocery shop",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 30),
+
+                // 🔹 Name
                 TextFormField(
                   controller: _nameController,
-                  decoration: const InputDecoration(
-                    labelText: "Full Name",
-                  ),
+                  decoration: const InputDecoration(labelText: "Name"),
                   validator: (value) =>
                   value == null || value.isEmpty ? "Enter your name" : null,
                 ),
                 const SizedBox(height: 16),
 
-                // 🔹 Phone Number
+                // 🔹 Phone
                 TextFormField(
                   controller: _phoneController,
                   keyboardType: TextInputType.phone,
@@ -128,7 +142,28 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 const SizedBox(height: 16),
 
-                // 🔹 OTP Field (after sending OTP)
+                // 🔹 Password
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    labelText: "Password",
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                          _obscurePassword ? Icons.visibility_off : Icons.visibility),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
+                  ),
+                  validator: (value) =>
+                  value == null || value.isEmpty ? "Enter password" : null,
+                ),
+                const SizedBox(height: 16),
+
+                // 🔹 OTP field (only if sent)
                 if (_otpSent)
                   TextFormField(
                     controller: _otpController,
@@ -137,13 +172,19 @@ class _SignUpPageState extends State<SignUpPage> {
                     validator: (value) =>
                     value == null || value.isEmpty ? "Enter OTP" : null,
                   ),
-
                 const SizedBox(height: 24),
 
-                // 🔹 Button
+                // 🔹 Sign Up button
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.arrow_forward, color: Colors.white),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
                     onPressed: _loading
                         ? null
                         : () {
@@ -155,11 +196,36 @@ class _SignUpPageState extends State<SignUpPage> {
                         }
                       }
                     },
-                    child: _loading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : Text(_otpSent ? "Verify OTP" : "Send OTP"),
+                    label: _loading
+                        ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                          color: Colors.white, strokeWidth: 2),
+                    )
+                        : Text(_otpSent ? "Verify OTP" : "Sign Up"),
                   ),
                 ),
+                const SizedBox(height: 20),
+
+                // 🔹 Log In link
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Already Have Account? "),
+                    GestureDetector(
+                      onTap: () {
+                        // Navigate to login
+                        // Navigator.pushNamed(context, "/login");
+                      },
+                      child: const Text(
+                        "Log In",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.green),
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
