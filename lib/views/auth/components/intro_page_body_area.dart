@@ -45,8 +45,8 @@ class IntroPageBodyArea extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () =>
-                        Navigator.pushNamed(context, AppRoutes.loginOrSignup),
-                    child: const Text('Continue with Email or Phone'),
+                        Navigator.pushNamed(context, AppRoutes.login),
+                    child: const Text('SIGN IN'),
                   ),
                 ),
                 const SizedBox(height: AppDefaults.padding),
