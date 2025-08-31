@@ -152,8 +152,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SizedBox(height: 20), // Adjusted spacing
 
                 const Text(
-                  "Welcome to our\ngrocery shop",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  "Welcome E-Grocery",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
                 ),
                 const SizedBox(height: 30),
 
@@ -173,7 +173,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   keyboardType: TextInputType.phone,
                   decoration: const InputDecoration(
                     labelText: "Phone Number",
-                    hintText: "+12223334444", // Emphasize E.164 format
+                    hintText: "+923083316261", // Emphasize E.164 format
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) return "Enter phone number";
@@ -214,7 +214,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
-                    icon: const Icon(Icons.arrow_forward, color: Colors.white),
+                    //icon: const Icon(Icons.arrow_forward, color: Colors.white),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       padding: const EdgeInsets.symmetric(vertical: 14),
@@ -231,7 +231,10 @@ class _SignUpPageState extends State<SignUpPage> {
                           color: Colors.white, strokeWidth: 2),
                     )
                         // Text no longer changes based on _otpSent
-                        : const Text("Sign Up"),
+                        : const Text(
+                        "Sign Up",
+                      style: TextStyle(fontSize: 18,fontWeight: FontWeight.w900)
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
