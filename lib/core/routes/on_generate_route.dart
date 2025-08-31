@@ -83,7 +83,15 @@ class RouteGenerator {
       case AppRoutes.loginOrSignup:
         return CupertinoPageRoute(builder: (_) => const LoginOrSignUpPage());
       case AppRoutes.numberVerification:
-        return CupertinoPageRoute(builder: (_) => const NumberVerificationPage());
+        final args = settings.arguments as Map<String, dynamic>?;
+        return CupertinoPageRoute(
+          builder: (_) => NumberVerificationPage(
+            verificationId: args?['verificationId'] ?? '',
+            phoneNumber: args?['phoneNumber'] ?? '',
+            name: args?['name'],
+            password: args?['password'],
+          ),
+        );
       case AppRoutes.forgotPassword:
         return CupertinoPageRoute(builder: (_) => const ForgetPasswordPage());
       case AppRoutes.passwordReset:
